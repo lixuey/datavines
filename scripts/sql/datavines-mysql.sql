@@ -482,34 +482,36 @@ CREATE TABLE `dv_issue` (
 -- ----------------------------
 DROP TABLE IF EXISTS `dv_job`;
 CREATE TABLE `dv_job` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL COMMENT '作业名称',
-  `type` int(11) NOT NULL DEFAULT '0' COMMENT '作业类型',
-  `datasource_id` bigint(20) NOT NULL COMMENT '数据源ID',
-  `datasource_id_2` bigint(20) DEFAULT NULL COMMENT '数据源2ID',
-  `schema_name` varchar(128) DEFAULT NULL COMMENT '数据库名',
-  `table_name` varchar(128) DEFAULT NULL COMMENT '表名',
-  `column_name` varchar(128) DEFAULT NULL COMMENT '列名',
-  `selected_column` text DEFAULT NULL COMMENT 'DataProfile 选中的列',
-  `metric_type` varchar(255) DEFAULT NULL COMMENT '规则类型',
-  `execute_platform_type` varchar(128) DEFAULT NULL COMMENT '运行平台类型',
-  `execute_platform_parameter` text COMMENT '运行平台参数',
-  `engine_type` varchar(128) DEFAULT NULL COMMENT '运行引擎类型',
-  `engine_parameter` text COMMENT '运行引擎参数',
-  `error_data_storage_id` bigint(20) DEFAULT NULL COMMENT '错误数据存储ID',
-  `parameter` longtext COMMENT '作业参数',
-  `retry_times` int(11) DEFAULT NULL COMMENT '重试次数',
-  `retry_interval` int(11) DEFAULT NULL COMMENT '重试间隔',
-  `timeout` int(11) DEFAULT NULL COMMENT '任务超时时间',
-  `timeout_strategy` int(11) DEFAULT NULL COMMENT '超时策略',
-  `tenant_code` bigint(20) DEFAULT NULL COMMENT '代理用户',
-  `env` bigint(20) DEFAULT NULL COMMENT '环境配置',
-  `create_by` bigint(20) NOT NULL COMMENT '创建用户ID',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_by` bigint(20) NOT NULL COMMENT '更新用户ID',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `unique_name` (`name`,`datasource_id`,`schema_name`,`table_name`,`column_name`) USING BTREE
+    `id` bigint(20) NOT NULL AUTO_INCREMENT,
+    `name` varchar(255) DEFAULT NULL COMMENT '作业名称',
+    `type` int(11) NOT NULL DEFAULT '0' COMMENT '作业类型',
+    `datasource_id` bigint(20) NOT NULL COMMENT '数据源ID',
+    `datasource_id_2` bigint(20) DEFAULT NULL COMMENT '数据源2ID',
+    `schema_name` varchar(128) DEFAULT NULL COMMENT '数据库名',
+    `table_name` varchar(128) DEFAULT NULL COMMENT '表名',
+    `column_name` varchar(128) DEFAULT NULL COMMENT '列名',
+    `selected_column` text COMMENT 'DataProfile 选中的列',
+    `metric_type` varchar(255) DEFAULT NULL COMMENT '规则类型',
+    `execute_platform_type` varchar(128) DEFAULT NULL COMMENT '运行平台类型',
+    `execute_platform_parameter` text COMMENT '运行平台参数',
+    `engine_type` varchar(128) DEFAULT NULL COMMENT '运行引擎类型',
+    `engine_parameter` text COMMENT '运行引擎参数',
+    `error_data_storage_id` bigint(20) DEFAULT NULL COMMENT '错误数据存储ID',
+    `is_error_data_output_to_datasource` tinyint(1) DEFAULT '0' COMMENT '错误数据是否输出至数据源',
+    `error_data_output_to_datasource_database` varchar(255) DEFAULT NULL COMMENT '错误数据存储数据库',
+    `parameter` longtext COMMENT '作业参数',
+    `retry_times` int(11) DEFAULT NULL COMMENT '重试次数',
+    `retry_interval` int(11) DEFAULT NULL COMMENT '重试间隔',
+    `timeout` int(11) DEFAULT NULL COMMENT '任务超时时间',
+    `timeout_strategy` int(11) DEFAULT NULL COMMENT '超时策略',
+    `tenant_code` bigint(20) DEFAULT NULL COMMENT '代理用户',
+    `env` bigint(20) DEFAULT NULL COMMENT '环境配置',
+    `create_by` bigint(20) NOT NULL COMMENT '创建用户ID',
+    `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_by` bigint(20) NOT NULL COMMENT '更新用户ID',
+    `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `unique_name` (`name`,`datasource_id`,`schema_name`,`table_name`,`column_name`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='规则作业';
 
 -- ----------------------------
@@ -627,6 +629,18 @@ CREATE TABLE `dv_server` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `server_un` (`host`,`port`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='集群节点信息';
+
+DROP TABLE IF EXISTS `dv_registry_lock`;
+CREATE TABLE `dv_registry_lock`
+(
+    `id`               bigint(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+    `lock_key`         varchar(256) NOT NULL COMMENT 'lock path',
+    `lock_owner`       varchar(256) NOT NULL COMMENT 'the lock owner, ip_port',
+    `update_time`      datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'update time',
+    `create_time`      datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'create time',
+    PRIMARY KEY (`id`),
+    unique (`lock_key`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- ----------------------------
 -- Table structure for dv_sla

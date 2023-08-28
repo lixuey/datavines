@@ -14,18 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.datavines.storage.api;
+package io.datavines.server.catalog.metadata.task;
 
-import io.datavines.common.param.ConnectorResponse;
-import io.datavines.common.param.TestConnectionRequestParam;
+import io.datavines.server.enums.FetchType;
+import io.datavines.server.repository.entity.DataSource;
+import lombok.Data;
 
-import java.util.Map;
+@Data
+public class CatalogMetaDataFetchRequest {
 
-public interface StorageConnector {
+    private DataSource dataSource;
 
-    String getConfigJson(boolean isEn);
+    private FetchType fetchType;
 
-    Map<String,Object> getParamMap(Map<String, Object> parameter);
+    private String database;
 
-    ConnectorResponse testConnect(TestConnectionRequestParam param);
+    private String table;
 }

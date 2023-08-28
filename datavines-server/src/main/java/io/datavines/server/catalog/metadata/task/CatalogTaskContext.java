@@ -21,12 +21,12 @@ import lombok.Data;
 @Data
 public class CatalogTaskContext {
 
-    private MetaDataFetchRequest metaDataFetchRequest;
+    private CatalogMetaDataFetchRequest catalogMetaDataFetchRequest;
 
     private Long catalogTaskId;
 
-    public CatalogTaskContext(MetaDataFetchRequest metaDataFetchRequest, Long catalogTaskId) {
-        this.metaDataFetchRequest = metaDataFetchRequest;
+    public CatalogTaskContext(CatalogMetaDataFetchRequest catalogMetaDataFetchRequest, Long catalogTaskId) {
+        this.catalogMetaDataFetchRequest = catalogMetaDataFetchRequest;
         this.catalogTaskId = catalogTaskId;
     }
 }
